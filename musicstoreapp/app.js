@@ -4,20 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
 var app = express();
 
-app.get("/songs", function (req, res) {
-    console.log("depurar aqui")
-    res.send("Lista de canciones")
-});
-
-app.get("/singers", function (req, res) {
-    console.log("depurar aqui")
-    res.send("Lista de cantantes")
-});
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+require("./routes/songs.js")(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,5 +38,17 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+module.exports = function (app) {
+    app.get("/songs", function (req, res) {
+
+        let response = "";
+        if(req.query.title != null && typeof(req.query.title) != "undefined")
+            response = 'Titulo: ' + req.query.title +'<br>'
+        if (req.query.auth != null && typeof (req.query.auth) != "undefined")
+            response += 'Autor' +req.query.auth;
+        res.send(response);
+    });
+};
 
 module.exports = app;
