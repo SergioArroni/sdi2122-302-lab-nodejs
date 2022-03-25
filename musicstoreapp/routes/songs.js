@@ -14,7 +14,16 @@ module.exports = function (app) {
         let response = "id: " + req.params.id + '<br>' + 'Tipo de música: ' + req.params.kind;
         res.send(response);
     });
+
+    app.post('/songs/add', function (req, res) {
+            let respose = "Cancion agregada: " + req.body.title + "<br>"
+                + "genero: " + req.body.kind + "<br>"
+                + "precio: " + req.body.price
+            res.send(respose);
+        }
+    );
 };
+
 
 
 

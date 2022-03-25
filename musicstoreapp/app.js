@@ -6,6 +6,10 @@ var logger = require('morgan');
 
 var app = express();
 
+let bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 require("./routes/songs.js")(app);
@@ -43,10 +47,10 @@ module.exports = function (app) {
     app.get("/songs", function (req, res) {
 
         let response = "";
-        if(req.query.title != null && typeof(req.query.title) != "undefined")
-            response = 'Titulo: ' + req.query.title +'<br>'
+        if (req.query.title != null && typeof (req.query.title) != "undefined")
+            response = 'Titulo: ' + req.query.title + '<br>'
         if (req.query.auth != null && typeof (req.query.auth) != "undefined")
-            response += 'Autor' +req.query.auth;
+            response += 'Autor' + req.query.auth;
         res.send(response);
     });
 };
