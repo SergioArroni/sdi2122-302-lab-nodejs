@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 require("./routes/songs.js")(app);
+require("./routes/authors.js")(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,6 +52,20 @@ module.exports = function (app) {
             response = 'Titulo: ' + req.query.title + '<br>'
         if (req.query.auth != null && typeof (req.query.auth) != "undefined")
             response += 'Autor' + req.query.auth;
+        res.send(response);
+    });
+};
+
+module.exports = function (app) {
+    app.get("/authors", function (req, res) {
+
+        let response = "";
+        if (req.query.name != null && typeof (req.query.name) != "undefined")
+            response = 'Nombre: ' + req.query.name + '<br>'
+        if (req.query.group != null && typeof (req.query.group) != "undefined")
+            response += 'Grupo: ' + req.query.group;
+        if (req.query.rol != null && typeof (req.query.rol) != "undefined")
+            response += 'Rol: ' + req.query.rol;
         res.send(response);
     });
 };
