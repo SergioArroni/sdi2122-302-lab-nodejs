@@ -14,9 +14,11 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 const {MongoClient} = require("mongodb");
-const url = 'mongodb+srv://admin:Marvel123@tiendamusica.hhkbe.mongodb.net/tiendamusica?retryWrites=true&w=majority';
+const url = 'mongodb+srv://SergioArroni:julio321@tiendamusica.hhkbe.mongodb.net/tiendamusica?retryWrites=true&w=majority';
 app.set('connectionStrings', url);
-require("./routes/songs.js")(app, MongoClient);
+let songsRepository = require("./repositories/songsRepository.js");
+songsRepository.init(app, MongoClient);
+require("./routes/songs.js")(app, songsRepository);
 require("./routes/authors.js")(app);
 
 // view engine setup
