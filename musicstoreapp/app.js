@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 var indexRouter = require('./routes/index');
 
-const {MongoClient} = require("mongodb");
+const {MongoClient, ObjectId} = require("mongodb");
 const url = 'mongodb+srv://SergioArroni:julio321@tiendamusica.hhkbe.mongodb.net/tiendamusica?retryWrites=true&w=majority';
 app.set('connectionStrings', url);
 
@@ -36,16 +36,20 @@ const userAudiosRouter = require('./routes/userAudiosRouter');
 app.use("/songs/add", userSessionRouter);
 app.use("/publications", userSessionRouter);
 app.use("/audios/", userAudiosRouter);
-app.use("/shop/", userSessionRouter)
+app.use("/shop/", userSessionRouter);
 
 let songsRepository = require("./repositories/songsRepository.js");
 songsRepository.init(app, MongoClient);
 
 const usersRepository = require("./repositories/usersRepository.js");
 usersRepository.init(app, MongoClient);
-require("./routes/users.js")(app, usersRepository);
 
-require("./routes/songs.js")(app, songsRepository);
+const commentsRepository = require("./repositories/commentsRepository.js");
+commentsRepository.init(app, MongoClient);
+
+require("./routes/users.js")(app, usersRepository);
+require("./routes/comments.js")(app, commentsRepository);
+require("./routes/songs.js")(app, songsRepository, commentsRepository);
 require("./routes/authors.js")(app);
 
 // view engine setup
@@ -98,6 +102,20 @@ module.exports = function (app) {
             response += 'Grupo: ' + req.query.group;
         if (req.query.rol != null && typeof (req.query.rol) != "undefined")
             response += 'Rol: ' + req.query.rol;
+        res.send(response);
+    });
+};
+
+module.exports = function (app) {
+    app.get("/comments", function (req, res) {
+
+        let response = "";
+        if (req.query.auth != null && typeof (req.query.auth) != "undefined")
+            response = 'Author: ' + req.query.auth + '<br>'
+        if (req.query.text != null && typeof (req.query.text) != "undefined")
+            response += 'Text: ' + req.query.text;
+        if (req.query.song_id != null && typeof (req.query.song_id) != "undefined")
+            response += 'Song: ' +  ObjectId(req.query.song_id);
         res.send(response);
     });
 };

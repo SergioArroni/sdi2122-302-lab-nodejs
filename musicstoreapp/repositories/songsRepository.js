@@ -26,8 +26,7 @@ module.exports = {
             throw (error);
         }
     }
-    ,
-    getSongs: async function (filter, options) {
+    , getSongs: async function (filter, options) {
         try {
             const client = await this.mongoClient.connect(this.app.get('connectionStrings'));
             const database = client.db("musicStore");
@@ -39,8 +38,7 @@ module.exports = {
             throw (error);
         }
     }
-    ,
-    insertSong: function (song, callbackFunction) {
+    , insertSong: function (song, callbackFunction) {
         this.mongoClient.connect(this.app.get('connectionStrings'), function (err, dbClient) {
             if (err) {
                 callbackFunction(null)
