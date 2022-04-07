@@ -110,9 +110,13 @@ module.exports = function (app, songsRepository, commentsRepository) {
     app.get('/songs/:id', function (req, res) {
         let filter = {_id: ObjectId(req.params.id)};
         let options = {};
-        let comments = commentsRepository.getComments(filter, options);
         songsRepository.findSong(filter, options).then(song => {
-            res.render("songs/song.twig", {song: song, comments: comments});
+            let filter2 = {song_id: ObjectId(req.params.id)};
+            commentsRepository.getComments(filter2, options).then( comments => {
+                res.render("songs/song.twig", {song: song, comments: comments});
+            }).catch(error => {
+                res.send("Se ha producido un error al buscar el comentario " + error)
+            });
         }).catch(error => {
             res.send("Se ha producido un error al buscar la canción " + error)
         });
@@ -146,7 +150,6 @@ module.exports = function (app, songsRepository, commentsRepository) {
             res.send("Se ha producido un error al listar las canciones " + error)
         });
     });
-
 }
 
 
