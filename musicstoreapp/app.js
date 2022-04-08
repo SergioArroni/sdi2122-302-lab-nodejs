@@ -38,6 +38,10 @@ app.use("/publications", userSessionRouter);
 app.use("/audios/", userAudiosRouter);
 app.use("/shop/", userSessionRouter);
 
+const userAuthorRouter = require('./routes/userAuthorRouter');
+app.use("/songs/edit", userAuthorRouter);
+app.use("/songs/delete", userAuthorRouter);
+
 let songsRepository = require("./repositories/songsRepository.js");
 songsRepository.init(app, MongoClient);
 
@@ -115,7 +119,7 @@ module.exports = function (app) {
         if (req.query.text != null && typeof (req.query.text) != "undefined")
             response += 'Text: ' + req.query.text;
         if (req.query.song_id != null && typeof (req.query.song_id) != "undefined")
-            response += 'Song: ' +  ObjectId(req.query.song_id);
+            response += 'Song: ' + ObjectId(req.query.song_id);
         res.send(response);
     });
 };
