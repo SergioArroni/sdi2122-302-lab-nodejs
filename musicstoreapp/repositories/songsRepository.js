@@ -13,6 +13,21 @@ module.exports = {
                 purchasesCollection.insertOne(shop).then(result => callbackFunction(result.insertedId)).then(() => dbClient.close()).catch(err => callbackFunction({error: err.message}));
             }
         });
+    }, getSongsPg: async function (filter, options, page) {
+        try {
+            const limit = 4;
+            const client = await this.mongoClient.connect(this.app.get('connectionStrings'));
+            const database = client.db("musicStore");
+            const collectionName = 'songs';
+            const songsCollection = database.collection(collectionName);
+            const songsCollectionCount = await songsCollection.count();
+            const cursor = songsCollection.find(filter, options).skip((page - 1) * limit).limit(limit)
+            const songs = await cursor.toArray();
+            const result = {songs: songs, total: songsCollectionCount};
+            return result;
+        } catch (error) {
+            throw (error);
+        }
     }, getPurchases: async function (filter, options) {
         try {
             const client = await this.mongoClient.connect(this.app.get('connectionStrings'));
