@@ -3,7 +3,7 @@ const {render} = require("express/lib/application");
 module.exports = function (app, songsRepository, commentsRepository) {
     app.get('/add', function (req, res) {
         let response = parseInt(req.query.num1) + parseInt(req.query.num2);
-        res.send(String(response));
+        res.redirect("/publications");
     });
 
     app.get("/songs/edit/:id", function (req, res) {
@@ -25,7 +25,7 @@ module.exports = function (app, songsRepository, commentsRepository) {
                     if (result == null) {
                         res.send("Error al actualizar la portada o el audio de la canción");
                     } else {
-                        res.send("Se ha modificado el registro correctamente");
+                        res.redirect("/publications");
                     }
                 });
             }
