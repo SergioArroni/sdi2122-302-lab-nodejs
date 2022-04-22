@@ -1,10 +1,13 @@
 var createError = require('http-errors');
 var express = require('express');
+let jwt = require('jsonwebtoken');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var app = express();
+
+app.set('jwt', jwt);
 
 let expressSession = require('express-session');
 app.use(expressSession({
@@ -44,6 +47,9 @@ const userAuthorRouter = require('./routes/userAuthorRouter');
 app.use("/songs/edit", userAuthorRouter);
 app.use("/songs/delete", userAuthorRouter);
 
+const userTokenRouter = require('./routes/userTokenRouter');
+app.use("/api/v1.0/songs/", userTokenRouter);
+
 let songsRepository = require("./repositories/songsRepository.js");
 songsRepository.init(app, MongoClient);
 
@@ -55,7 +61,7 @@ commentsRepository.init(app, MongoClient);
 
 require("./routes/songs.js")(app, songsRepository, commentsRepository);
 
-require("./routes/api/songsAPIv1.0.js")(app, songsRepository);
+require("./routes/api/songsAPIv1.0.js")(app, songsRepository, usersRepository);
 require("./routes/users.js")(app, usersRepository);
 require("./routes/comments.js")(app, commentsRepository);
 require("./routes/authors.js")(app);
