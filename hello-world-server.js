@@ -11,8 +11,7 @@ app.get('/memory', function (req, res) {
             memory: freeMemory
         });
     }, 10000);
-})
-;
+});
 app.listen(port, function () {
     console.log("Servidor listo " + port);
 });
