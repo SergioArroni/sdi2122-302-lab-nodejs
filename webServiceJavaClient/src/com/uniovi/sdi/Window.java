@@ -35,7 +35,7 @@ public class Window {
             }
         });
         panel.add(updateButton);
-// Botón Actualizar
+        // Botón Actualizar
         turnOffButton = new JButton("Apagar Equipo");
         turnOffButton.setBorder(new EmptyBorder(10, 10, 10, 10));
         turnOffButton.addActionListener(new ActionListener() {
