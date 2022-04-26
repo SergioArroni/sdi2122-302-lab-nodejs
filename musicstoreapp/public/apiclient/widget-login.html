@@ -16,6 +16,7 @@
     </div>
 </div>
 <script>
+    window.history.pushState("", "", "/apiclient/client.html?w=login");
     $("#boton-login").click(function () {
         $.ajax({
             url: URLbase + "/users/login",
@@ -26,13 +27,14 @@
             },
             dataType: "json",
             success: function success(response) {
-                console.log(response.token);
+                console.log(response.token); // <- Prueba
                 token = response.token;
+                Cookies.set('token', response.token);
                 $("#main-container").load("widget-songs.html");
             },
             error: function (error) {
-                $("#widget-login")
-                    .prepend("<div class='alert alert-danger'>Usuario no encontrado</div>")
+                Cookies.remove('token');
+                $("#widget-login").prepend("<div class='alert alert-danger'>Usuario no encontrado</div>");
             }
         });
     });
