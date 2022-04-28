@@ -23,10 +23,17 @@
         $.ajax({
             url: URLbase + "/songs", type: "POST", data: {
                 title: $("#title-add").val(), kind: $("#kind-add").val(), price: $("#price-add").val()
-            }, dataType: 'json', headers: {"token": token}, success: function (response) {
-                console.log(response); // <-- Prueba $("#main-container").load("widget-songs.html");
+            }, dataType: 'json', headers: {"token": token},
+            success: function (response) {
+                console.log(response); // <-- Prueba
+                if (response.title === undefined || response.kind === undefined || response.price === undefined || response.price < 0 || response.title.length() > 8 || response.kind.length() > 5) {
+                    alert('Has introducido mal los datos');
+                } else {
+                    $("#main-container").load("widget-songs.html");
+                }
             },
-            error: function (error) {
+            error: function (response, error) {
+
                 $("#main-container").load("widget-login.html");
             }
         });
